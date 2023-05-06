@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { fetchTopHeadlines } from "./utils";
 
 function App() {
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    const getTopHeadlines = async () => {
+      const articles = await fetchTopHeadlines("us");
+      setArticles(articles);
+    };
+
+    getTopHeadlines();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Top Headlines</h1>
+      <ul>
+        {articles.map((article) => (
+          <li key={article.title}>
+            <a href={article.url}>{article.title}</a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
